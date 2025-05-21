@@ -3,8 +3,10 @@ import re
 from datetime import date, timedelta
 
 import google.generativeai as genai
+from dotenv import load_dotenv
 
-API_KEY = "AIzaSyCmmainObr-CVK6Ib3axici_M3wv-4QCKs"
+load_dotenv()
+API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL_NAME = "gemini-1.5-flash-latest"
 DIARY_DIR = "diary"
 WEEKDAYS = {
