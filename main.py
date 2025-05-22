@@ -3,11 +3,10 @@ import re
 from datetime import date, timedelta
 
 import google.generativeai as genai
-from dotenv import load_dotenv
+import requests
 
-load_dotenv()
-API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL_NAME = "gemini-1.5-flash-latest"
+
 DIARY_DIR = "diary"
 WEEKDAYS = {
     "monday": 0,
@@ -18,7 +17,6 @@ WEEKDAYS = {
     "saturday": 5,
     "sunday": 6,
 }
-genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel(MODEL_NAME)
 
 with open("./data/prompt.txt", "r", encoding="utf-8") as f:
@@ -126,17 +124,44 @@ def ask_gemini(prompt_text):
         return f"An error occurred while communicating with the Gemini API: {e}"
 
 
-def main():
-    while True:
-        user_prompt = input("You: ")
-        if user_prompt.lower() == "exit":
-            break
-        if not user_prompt:
-            continue
+def ask_deepseek(prompt_text):
+    today_str = date.today().strftime("%Y-%m-%d")
+    final_prompt = f"{SYSTEM_PROMPT}\n\nToday is {today_str}.\n"
 
-        gemini_response = ask_gemini(user_prompt)
-        print(f"Gemini: {gemini_response}")
+    # Date range support
+    date_range = parse_relative_date_range(prompt_text)
+    if date_range:
+        start, end = date_range
+        combined_entries = read_diary_entries_in_range(start, end)
+        if combined_entries:
+            final_prompt += f"\nHere are your diary entries from {start} to {end}:\n{combined_entries}\n"
+        else:
+            final_prompt += f"\nNo diary entries found from {start} to {end}.\n"
+    else:
+        # Fallback to single day
+        target_date = parse_relative_date(prompt_text)
+        if target_date:
+            diary_entry = read_diary_entry(target_date)
+            if diary_entry:
+                final_prompt += f"\nDiary entry for {target_date}:\n{diary_entry}\n"
+            else:
+                final_prompt += f"\nNo diary entry for {target_date}.\n"
 
+    final_prompt += f"\nUser prompt: {prompt_text}"
 
-if __name__ == "__main__":
-    main()
+    try:
+        response = requests.post(
+            "http://localhost:11434/api/generate",
+            json={
+                "model": "mistral:7b-instruct",
+                "prompt": final_prompt,
+                "stream": False,
+            },
+            timeout=30,
+        )
+        result = response.json()
+        if "response" in result:
+            return result["response"]
+        return "No response field found in DeepSeek result."
+    except Exception as e:
+        return f"An error occurred while communicating with DeepSeek: {e}"
