@@ -11,18 +11,39 @@
 </head>
 
 <body>
-    <div class="px-4 py-5 my-5 text-center" id="main">
-        <div>
-            <h1 class="display-5 fw-bold text-body-emphasis">Futago</h1>
+    <header class="p-3 text-bg-dark">
+        <div class="">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><button type="button" class="btn" id="help">Help</button></li>
+                    <li><button type="button" class="btn" id="lang">Language</button></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="px-4 py-3 text-center" id="main">
+        <h1 class="display-5 fw-bold text-body-emphasis">Futago</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Your AI Twin</p>
+        </div>
+        <div class="container px-4 py-3 border">
+          <div class="scrollable-container text-start" id="response">
+          </div>
+        </div>
+        <div class="px-4 py-5 text-center" id="prompt">
             <div class="col-lg-6 mx-auto">
-                <p class="lead mb-4">Summarize your loved-ones' activities</p>
-                <div class="form-floating mb-3 prompt">
+                <div class="form-floating">
                     <input type="prompt" class="form-control" id="promptInput" placeholder="">
                     <label for="floatingInput">Enter Prompt</label>
                 </div>
             </div>
         </div>
     </div>
+    <footer class="footer mt-auto py-3 bg-body-tertiary fixed-bottom">
+        <div class="nav justify-content-center py-1">
+            <p class="my-0">Futago Project made for Hackathon @SUMMER</p>
+        </div>
+    </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../static/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
