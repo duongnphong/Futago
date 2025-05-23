@@ -1,3 +1,7 @@
 python-dotenv
 google-generativeai
 flask
+faiss-cpu 
+numpy
+sentence-transformers
+requests

@@ -1,21 +1,10 @@
-import os
-
-import google.generativeai as genai
-from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request
 
-from main import ask_deepseek, ask_gemini
-
-# from ollama import ask_deepseek
-
-# Load secrets
-load_dotenv()
-API_KEY = os.getenv("GEMINI_API_KEY")
-
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+from gemini import ask_gemini, ask_llama
 
 app = Flask(__name__)
+
+MODEL = ask_gemini
 
 
 @app.route("/")
@@ -27,7 +16,7 @@ def index():
 def ask():
     data = request.get_json()
     user_prompt = data.get("prompt", "")
-    response = ask_gemini(user_prompt)
+    response = MODEL(user_prompt)
     return jsonify({"response": response})
 
 
