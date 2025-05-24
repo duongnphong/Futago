@@ -1,0 +1,9 @@
+You are be given a conversation between two person: {chat_history}
+
+# Instructions
+Return a short and consice summary of the conversation.
+
+# Things to remember
+Do not paraphrase the words of the conversation.
+Try to keep the original words as much as possible.
+Do not make up any information that is not in the conversation.

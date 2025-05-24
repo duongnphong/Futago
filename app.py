@@ -5,7 +5,7 @@ from gemini import ask_gemini, ask_llama
 app = Flask(__name__)
 
 MODEL = ask_llama
-MAX_HISTORY_TURNS = 4
+# MAX_HISTORY_TURNS = 4
 chat_history = []  # Store history globally (for now)
 
 
@@ -21,8 +21,8 @@ def ask():
     user_prompt = data.get("prompt", "")
     response = MODEL(user_prompt, chat_history)
     chat_history.append({"user": user_prompt, "assistant": response})
-    if len(chat_history) > MAX_HISTORY_TURNS:
-        chat_history = chat_history[-MAX_HISTORY_TURNS:]
+    # if len(chat_history) > MAX_HISTORY_TURNS:
+    #     chat_history = chat_history[-MAX_HISTORY_TURNS:]
     return jsonify({"response": response})
 
 

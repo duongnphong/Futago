@@ -15,8 +15,6 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel(MODEL_NAME)
 
-instructions = open("./data/prompt.txt", "r").read()
-
 
 # Fine-tune on date, day, time
 def prompt_ehancement_v1(query, today_str=None):
@@ -39,17 +37,9 @@ def prompt_ehancement_v1(query, today_str=None):
 
 # Fine-tune on query context
 def prompt_enhancement_v2(query, chat_history=None):
-    prompt = (
-        instructions
-        + f"""given this history:
-    {chat_history}
-    and this query:
-    {query}
-    Refine the query to be more specific and relevant to the context.
-    If there is no history, just return the query.
-    No need to change word choice, just make it more specific.
-    ONLY RETURN THE REFINE QUERY, DO NOT RETURN ANYTHING ELSE.
-    """
+    query_enhancement = open("./data/prompt_enhancement.txt", "r").read()
+    prompt = query_enhancement.replace("{chat_history}", str(chat_history)).replace(
+        "{query}", str(query)
     )
     try:
         enhance_query = model.generate_content(prompt)
@@ -58,12 +48,26 @@ def prompt_enhancement_v2(query, chat_history=None):
         return f"An error with Gemini API: {e}"
 
 
+# Fine-tune on chat history
+def history_enhancement(chat_history):
+    if not chat_history:
+        return
+    chat_enhancement = open("./data/history_enhancement.txt", "r").read()
+    prompt = chat_enhancement.replace("{chat_history}", str(chat_history))
+    try:
+        enhance_history = model.generate_content(prompt)
+        return enhance_history.text
+    except Exception as e:
+        return f"An error with Gemini API: {e}"
+
+
 def final_prompt(query, chat_history=None):
+    chat_history = history_enhancement(chat_history)
     query = prompt_ehancement_v1(query)
     query = prompt_enhancement_v2(query, chat_history)
     model = SentenceTransformer("all-MiniLM-L6-v2")
     index, metadata = load_faiss_and_metadata()
-    results = search_index(query, model, index, metadata, k=5)
+    results = search_index(query, model, index, metadata, k=10)
     # Remove duplicates by content
     seen = set()
     unique_results = []
@@ -84,24 +88,19 @@ def final_prompt(query, chat_history=None):
             for c in results
         ]
     )
-
+    instructions = open("./data/system_prompt.txt", "r").read()
     prompt = (
-        instructions
-        + f"""
-You will have acces to today date which is {today_str}.
-You will also have access to conversation history.
-{chat_history}
-## Context to answer the question.
-{context}
-## Question:
-{query}"""
+        instructions.replace("{today_str}", str(today_str))
+        .replace("{chat_history}", str(chat_history))
+        .replace("{context}", str(context))
+        .replace("{query}", str(query))
     )
     return prompt
 
 
-# if __name__ == "__main__":
-#     # loop
-#     while True:
-#         query = input("You: ")
-#         print(final_prompt(query))
-#         print("-" * 50)
+if __name__ == "__main__":
+    # loop
+    while True:
+        query = input("You: ")
+        print(final_prompt(query))
+        print("-" * 50)

@@ -1,0 +1,19 @@
+You are be given a conversation between two person.
+`user` is asking question related to the tasks or job that the other person has done during a period of time.
+`assistant` is answering the question.
+
+# Source of information
+## `chat_history`:
+{chat_history}
+## `query` from `user`:
+{query}
+-------
+# Instructions
+Refine the query to be more specific and relevant to the context of `chat_history`.
+
+# Things to remember
+Do not paraphrase the `query`, just make it more specific.
+Only the refined query should be returned and nothing else.
+When there is no `chat_history` provided, just return back the query itself.
+If there is no relevant information in the `chat_history`, just return back the query itself.
+There might be case where the user changed the topic of the conversation, in that case, just return back the query itself.
