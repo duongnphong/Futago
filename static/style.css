@@ -65,20 +65,20 @@ body{
     margin-bottom: 10px;
     word-wrap: break-word;
     white-space: pre-wrap; 
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 5px rgba(0,0,0,0.1);
 }
 
 .user-input {
-    background-color: #67AE6E;
+    background-color: #328E6E;
     color: #E1EEBC;
     align-self: flex-end;
     margin-left: auto;
-    text-align: right;
+    text-align: left;
 }
 
 .api-response {
-    background-color: #67AE6E; /* A distinct background color for API messages */
-    color: #E1EEBC; /* Text color for API messages */
+    background-color: #cbe484; /* A distinct background color for API messages */
+    color: #328E6E; /* Text color for API messages */
     align-self: flex-start; /* Pushes the message to the left side of the flex container */
     margin-right: auto; /* Pushes the message to the far left */
     text-align: left; /* Aligns text within the bubble to the left */
