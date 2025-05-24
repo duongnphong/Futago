@@ -1,21 +1,87 @@
 body{
     min-height: 100vh;
+    background-color: #E1EEBC;
 }
 
 #main{
     display: flex;
     flex-direction: column;
+    color: #328E6E;
+}
+
+.text-body-emphasis {
+    color: #328E6E !important;
+}
+
+.footer{
+  background-color: #90C67C;
+  color: #E1EEBC;
+}
+
+.form-control{
+  background-color: #67AE6E;
+  color: #E1EEBC;
+}
+
+.form-floating label{
+  color: #E1EEBC;
+}
+
+/* Styles for form-control when it's focused */
+.form-control:focus {
+    background-color: #67AE6E; /* Keep the same background color on focus */
+    color: #E1EEBC; /* Set text color on focus (if it changes to white) */
+    border-color: #67AE6E; /* Custom border color on focus */
+    box-shadow: 0 0 0 0.25rem rgba(103, 174, 110, 0.25); /* Custom focus ring color */
+}
+
+/* Also ensure the label color remains consistent on focus if it's changing */
+.form-floating {
+    color: #E1EEBC; /* Default label color */
+}
+
+.form-floating input:focus ~ label {
+    color: #E1EEBC; /* Keep label color the same when input is focused */
 }
 
 #response{
     min-height: 45vh;
     max-height: 45vh;
+    display: flex;
+    flex-direction: column;
+    
 }
 
 .scrollable-container {
   max-height: 30vh; /* Adjust this value as needed */
   overflow-y: auto;
   padding: 15px; /* Optional: for inner spacing */
+}
+
+.chat-message {
+    max-width: 75%; 
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    white-space: pre-wrap; 
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.user-input {
+    background-color: #67AE6E;
+    color: #E1EEBC;
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: right;
+}
+
+.api-response {
+    background-color: #67AE6E; /* A distinct background color for API messages */
+    color: #E1EEBC; /* Text color for API messages */
+    align-self: flex-start; /* Pushes the message to the left side of the flex container */
+    margin-right: auto; /* Pushes the message to the far left */
+    text-align: left; /* Aligns text within the bubble to the left */
 }
 
 /* Custom Scrollbar Styles for .scrollable-container (for a Gemini-like look) */
